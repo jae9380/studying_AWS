@@ -170,7 +170,7 @@ vpc는 전체 네트워크를 집이라고 생각하면 서브넷은 방이라�
 - #### 테라폼 CLI 설치
   [테라폼 CLI 설치](https://developer.hashicorp.com/terraform/install?product_intent=terraform)
 
-설치 후 환경변수 등록
+설치 후 환경변수 등록 진행
 
 설치 확인을 위해 `cmd`를 열어서
 
@@ -179,3 +179,29 @@ terraform
 ```
 
 입력을 하면 확인이 가능하다
+
+나느 인텔리제이를 이용하여 관리를 할려고 한다. 그래서 인텔리제이에 테라폼 플러그인 설치
+
+기존에 만들었던 vpc는 다시 삭제하였다.
+
+테라폼 명령어
+
+```bash
+terraform init
+// 라이브러리 다운로드
+// 라이브러리 소스코드 변경이 있을 때 마다 실행
+
+terraform plan
+// 실제 리소스 생성을 하는것이 아닌
+// 현재 소스코드의 실행 가능여부 검사
+
+terraform apply
+// 리소스 생성
+
+terraform destroy
+// 리소스 삭제
+```
+
+main.ft파일을 만들어 코드를 입력한 후
+위 명령어를 이용하여 vpc 생성이 가능하다.
+그리고 `terraform destroy`입력하여 다시 삭제를 진행 했다.
