@@ -68,3 +68,14 @@ resource "aws_subnet" "subnet_2" {
     Name = "${var.prefix}-subnet-2"
   }
 }
+
+// AWS 인터넷 게이트웨이 리소스를 생성하고 이름을 'igw_1'로 설정
+resource "aws_internet_gateway" "igw_1" {
+  // 이 인터넷 게이트웨이가 연결될 VPC를 지정. 여기서는 'vpc_1'를 선택
+  vpc_id = aws_vpc.vpc_1.id
+
+  // 리소스에 대한 태그를 설정
+  tags = {
+    Name = "${var.prefix}-igw-1"
+  }
+}
