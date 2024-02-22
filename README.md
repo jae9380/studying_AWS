@@ -266,3 +266,59 @@ NCP 같은 경우에는 로그인 할 때 아이디/비밀번호가 필요했다
 - EC2는 특정 서브넷에 속한다.
 - 키 파일 없이 AWS 콘솔에서 바로 EC2에 SSH 접속을 하려면 해당 EC2가 AmazonEC2RoleforSSM 권한을 갖고 있어야 한다.
 - 보통 EC2는 S3에 대한 권한을 갖는게 보통이다.
+
+EC2-1에 접속하여 
+ * docker 설치 및 실행
+  ```shell
+      yum install docker -y 
+      systemctl start docker
+      systemctl enable docker
+  ```
+ * docker 컴포즈 설치   
+  ```shell
+    curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+    # 최신 docker compose를 해당 링크에서 받을 수 있음
+    chmod +x /usr/local/bin/docker-compose
+    # 권한 부여
+    docker-compose version
+    # 설치 확인
+  ``` 
+* Git 설치
+  ```shell
+    yum install git
+    # Git 설치
+  ```
+  
+위 3가지 설치 후 
+소스코드를 받을 폴더를 생성 후 git clone을 통해서 간단한 Hello World!를 나타내는 프로젝트를 받았다.
+
+하지면 여기서 용량이 부족하여 30GB로 용량을 늘렸다.
+( 볼륨을 수정 할 때 인스턴스 동작을 중지 한다.)
+
+추가적으로 swapfile 생성
+
+Swapfile 
+  AWS EC2 프리티어에서 메모리는 1GB 크기이다. 이 상태로 무엇인가 진행을 할려고 하면 메모리 부족 현상이 발생된다. 
+이 현상을 막기 위해서는 나는 `swapfile`을 이용 할 생각이다.
+
+리눅스에서는 Swapping이라는게 존재하는데 이는 하드디스크를 가상 메모리로 전환시켜 사용하는 방식이다.
+
+* 생성
+```shell
+# dd 명령을 사용하여 루트 파일 시스템에 스왑 파일을 생성
+$ sudo dd if=/dev/zero of=/swapfile bs=128M count=32
+# 스왑 파일의 읽기 및 쓰기 권한을 업데이트
+$ sudo chmod 600 /swapfile
+# Linux 스왑 영역을 설정
+$ sudo mkswap /swapfile
+# 스왑 공간에 스왑 파일을 추가하여 스왑 파일을 즉시 사용할 수 있도록 설정
+$ sudo swapon /swapfile
+# 프로시저가 성공적인지 확인
+$ sudo swapon -s
+# 파일을 편집하여 부팅 시 스왑 파일을 시작
+$ sudo vi /etc/fstab
+#  파일 마지막 줄에 아래의 줄 추가 후 저장
+#  /swapfile swap swap defaults 0 0
+```
+
+도커 이미지 생성
